@@ -31,8 +31,21 @@ public class Controller  {
 		// connect to sensor and display RPC servers - using the RPCClients
 		// read value from sensor using RPC and write to display using RPC
 			
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
+		display = new DisplayStub(displayclient);
+		sensor = new SensorStub(sensorclient);
+		
+		displayclient.connect();
+		sensorclient.connect();
+		
+		for(int i = 0; i < N; i++) {
+			int temp = sensor.read();
+			display.write("" + temp);
+			try {
+				Thread.sleep(3000); // Pause i 1 sekund mellom målinger
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		// TODO - END
 		

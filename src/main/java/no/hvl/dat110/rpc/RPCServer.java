@@ -50,10 +50,20 @@ public class RPCServer {
 		   // - encapsulate return value 
 		   // - send back the message containing the RPC reply
 			
-		   if (true)
-				throw new UnsupportedOperationException(TODO.method());
+		  
+		   requestmsg = connection.receive();
+			
+		   byte[] data = requestmsg.getData();
 		   
-		   // TODO - END
+		   rpcid = data[0];
+		   byte[] param = RPCUtils.decapsulate(data);
+		   
+		   RPCRemoteImpl service = services.get(rpcid);
+		   
+		   byte[] returnValue = service.invoke(param);
+		   
+		   replymsg = new Message(RPCUtils.encapsulate(rpcid, returnValue));
+		   connection.send(replymsg);
 
 			// stop the server if it was stop methods that was called
 		   if (rpcid == RPCCommon.RPIDSTOP) {
